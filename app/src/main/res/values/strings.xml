@@ -2,4 +2,11 @@
     <string name="app_name">Grcki Kino</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome">Dobrodosli</string>
+    <string name="game_name">GRCKI KINO (20/80)</string>
+    <string name="drawing_time">Vreme izvlacenja</string>
+    <string name="remaining_time">Preostalo za uplatu</string>
+    <string name="something_went_wrong">Something went wrong, we couldn\'t do what you wanted from us</string>
+    <string name="error_occurred">Error occurred</string>
+    <string name="OK">OK</string>
 </resources>
