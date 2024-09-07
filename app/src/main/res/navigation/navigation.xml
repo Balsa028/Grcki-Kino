@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_drawingAnimationFragment_to_drawingListFragment"
             app:destination="@id/drawingListFragment" />
+        <action
+            android:id="@+id/action_drawingAnimationFragment_to_resultsFragment"
+            app:destination="@id/resultsFragment" />
     </fragment>
     <fragment
         android:id="@+id/resultsFragment"
@@ -34,6 +37,12 @@
         <action
             android:id="@+id/action_resultsFragment_to_drawingListFragment"
             app:destination="@id/drawingListFragment" />
+        <action
+            android:id="@+id/action_resultsFragment_to_drawingAnimationFragment"
+            app:destination="@id/drawingAnimationFragment" />
+        <action
+            android:id="@+id/action_resultsFragment_self"
+            app:destination="@id/resultsFragment" />
     </fragment>
     <fragment
         android:id="@+id/drawingDetailsFragment"
