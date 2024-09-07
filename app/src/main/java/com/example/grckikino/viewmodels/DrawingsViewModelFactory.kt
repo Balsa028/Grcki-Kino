@@ -10,6 +10,7 @@ class DrawingsViewModelFactory(private val repository: DrawingsRepository) :
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
         when {
             modelClass.isAssignableFrom(DrawingsViewModel::class.java) -> DrawingsViewModel(repository) as T
+            modelClass.isAssignableFrom(DrawingDetailsViewModel::class.java) -> DrawingDetailsViewModel(repository) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
 

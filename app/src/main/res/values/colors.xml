@@ -4,8 +4,19 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#0F1C41</color>
     <color name="grey">#707079</color>
+    <color name="light_grey">#B7B3B3</color>
+    <color name="dark_grey">#333334</color>
+    <color name="grey_surface">#151516</color>
     <color name="dark_blue">#010914</color>
     <color name="transparent">#00000000</color>
     <color name="light_blue">#003F47</color>
-    <color name="red">#D20707</color>
+    <color name="purple">#6A0DAD</color>
+    <color name="pink">#ED588A</color>
+    <color name="orange">#FF5722</color>
+    <color name="light_green">#8BC34A</color>
+    <color name="red">#E90A0A</color>
+    <color name="selected_color">#F1DC07</color>
+    <color name="unselected_color">#037888</color>
+    <color name="cloud_blue">#07A0F1</color>
+
 </resources>

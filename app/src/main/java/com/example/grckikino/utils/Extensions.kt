@@ -1,11 +1,12 @@
 package com.example.grckikino.utils
 
+import android.content.res.Resources
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 fun Long.formatDrawingTimeForDisplay(): String {
-    val date = Date(this + 1000)
+    val date = Date(this)
     val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
     return dateFormat.format(date)
 }
@@ -22,4 +23,8 @@ fun Long.formatRemainingTimeForDisplay(): String {
         String.format("%02d:%02d:%02d", hours, minutes, seconds)
     else
         String.format("%02d:%02d", minutes, seconds)
+}
+
+fun Int.toPx(): Float {
+    return this * Resources.getSystem().displayMetrics.density
 }

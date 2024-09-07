@@ -8,24 +8,6 @@
     android:background="@color/dark_blue"
     tools:context=".fragments.DrawingsFragment">
 
-    <LinearLayout
-        android:id="@+id/mozzart_surface"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/blue"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/mozzart"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="8dp"
-            android:src="@drawable/mozzart" />
-
-    </LinearLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header_surface"
         android:layout_width="match_parent"
@@ -34,7 +16,7 @@
         android:background="@color/grey"
         android:padding="2dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mozzart_surface">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/greek_flag"
@@ -103,9 +85,7 @@
         android:layout_marginHorizontal="7dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header_surface"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/header_surface" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

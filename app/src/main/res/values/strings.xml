@@ -5,8 +5,21 @@
     <string name="welcome">Dobrodosli</string>
     <string name="game_name">GRCKI KINO (20/80)</string>
     <string name="drawing_time">Vreme izvlacenja</string>
+    <string name="drawing_time_with_dots">Vreme izvlacenja:</string>
     <string name="remaining_time">Preostalo za uplatu</string>
     <string name="something_went_wrong">Something went wrong, we couldn\'t do what you wanted from us</string>
     <string name="error_occurred">Error occurred</string>
     <string name="OK">OK</string>
+    <string name="talon">Talon</string>
+    <string name="kolo">Kolo:</string>
+    <string name="drawing_live">Izvlacenje</string>
+    <string name="results">Rezultati</string>
+    <string name="random_selection">Slucajni odabir</string>
+    <string name="number">Brojeva:</string>
+    <string name="BK">B.K.</string>
+    <string name="kvota">Kvota</string>
+    <string name="random_text">Slucajni odabir</string>
+    <string name="past">Odigrano</string>
+    <string name="warning_title">Izvlacenje uskoro pocinje</string>
+    <string name="warning_description">Izvlacenje pocinje za 30 sekudni koje mozete pratiti na Izvlacenje tabu. Ukoliko propustite izvlacenje bez brige uvek rezultate mozete proveriti na Rezultati tabu</string>
 </resources>

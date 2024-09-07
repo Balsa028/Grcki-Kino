@@ -35,13 +35,7 @@ class DrawingsViewModel(private val repository: DrawingsRepository) : ViewModel(
         stopUpdatingRemainingTime()
         tickingJob = viewModelScope.launch {
             while (true) {
-                _updatedDrawingList.value = drawingList.mapNotNull { drawing ->
-                    val updatedDrawTime = drawing.drawTime - 1000
-                    if (updatedDrawTime - System.currentTimeMillis() > 0)
-                        drawing.copy(drawTime = updatedDrawTime)
-                    else null
-                }
-
+                _updatedDrawingList.value = drawingList.filter { it.drawTime - System.currentTimeMillis() > 0 }
                 delay(1000)
             }
         }

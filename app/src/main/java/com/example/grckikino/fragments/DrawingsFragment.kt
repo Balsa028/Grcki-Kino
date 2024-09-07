@@ -58,6 +58,7 @@ class DrawingsFragment : BaseFragment(), DrawingsAdapterListener {
 
     private  fun initViews(view: View) {
         drawingRecyclerView = view.findViewById(R.id.drawing_list_rec_view)
+        coordinator?.adjustToolbarForDrawingsListScreen()
         setupRecycleView()
     }
 
