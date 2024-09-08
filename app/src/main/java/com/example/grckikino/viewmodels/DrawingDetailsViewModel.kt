@@ -1,18 +1,25 @@
 package com.example.grckikino.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.grckikino.api.Result
+import com.example.grckikino.models.Drawing
 import com.example.grckikino.models.GridNumber
 import com.example.grckikino.repository.DrawingsRepository
+import com.example.grckikino.utils.GRCKI_LOTO_GAME_ID
 import com.example.grckikino.utils.formatRemainingTimeForDisplay
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-class DrawingDetailsViewModel(repository: DrawingsRepository) : ViewModel() {
+class DrawingDetailsViewModel(private val repository: DrawingsRepository) : ViewModel() {
+
+    private val _drawingResponse: MutableLiveData<Result<Drawing>> = MutableLiveData<Result<Drawing>>()
+    val drawingResponse: LiveData<Result<Drawing>> = _drawingResponse
 
     private val _updateRemainingTime: MutableLiveData<String> = MutableLiveData<String>()
     val updateRemainingTime: LiveData<String> = _updateRemainingTime
@@ -32,20 +39,29 @@ class DrawingDetailsViewModel(repository: DrawingsRepository) : ViewModel() {
     private val _decreaseSelectedCounter: MutableLiveData<Int> = MutableLiveData<Int>()
     val decreaseSelectedCounter: LiveData<Int> = _decreaseSelectedCounter
 
-    private val _saveSelectedItems: MutableLiveData<List<Int>> = MutableLiveData<List<Int>>()
-    val saveSelectedItems: LiveData<List<Int>> = _saveSelectedItems
+    private val _savedSelectedItems: MutableLiveData<List<Int>> = MutableLiveData<List<Int>>()
+    val savedSelectedItems: LiveData<List<Int>> = _savedSelectedItems
 
-    var selectedNumbers = mutableListOf<Int>()
+    private var selectedNumbers = mutableListOf<Int>()
+    private var currentDrawing: Drawing? = null
+    private var tickingJob: Job? = null
 
-    var tickingJob: Job? = null
+    fun getDrawingDetails(drawId: Int) {
+        _drawingResponse.value = Result.Loading()
 
-    fun startUpdatingRemainingTime(timeInMillis: Long) {
+        viewModelScope.launch {
+            val response = repository.getDrawingDetails(GRCKI_LOTO_GAME_ID, drawId)
+            _drawingResponse.value = response
+        }
+    }
+
+    fun startUpdatingRemainingTime(drawTime: Long) {
         stopUpdatingRemainingTime()
         tickingJob = viewModelScope.launch {
             var updatedValue: String
             while (true) {
-                if (timeInMillis - System.currentTimeMillis() > 0)
-                    updatedValue = timeInMillis.formatRemainingTimeForDisplay()
+                if (drawTime - System.currentTimeMillis() > 0)
+                    updatedValue = drawTime.formatRemainingTimeForDisplay()
                 else {
                     stopUpdatingRemainingTime()
                     updatedValue = "Odigrano"
@@ -58,6 +74,10 @@ class DrawingDetailsViewModel(repository: DrawingsRepository) : ViewModel() {
 
     private fun stopUpdatingRemainingTime() {
         tickingJob?.cancel()
+    }
+
+    fun saveCurrentDrawing(drawing: Drawing) {
+        currentDrawing = drawing
     }
 
     fun selectRandomNumbers(quantity: Int, gridNumbers: List<GridNumber>) {
@@ -83,25 +103,31 @@ class DrawingDetailsViewModel(repository: DrawingsRepository) : ViewModel() {
             _increaseSelectedCounter.value = 1
         }
 
-        _saveSelectedItems.value = selectedNumbers
+        _savedSelectedItems.value = selectedNumbers
     }
 
-    private fun clearSelectedNumber(gridNumbers: List<GridNumber>) {
+    fun clearSelectedNumber(gridNumbers: List<GridNumber>) {
         selectedNumbers.forEach {
             gridNumbers[it - 1].isSelected = false
             _removeItemOnIndex.value = it - 1
         }
         _decreaseSelectedCounter.value = selectedNumbers.size
         selectedNumbers.clear()
-        _saveSelectedItems.value = selectedNumbers
+        _savedSelectedItems.value = selectedNumbers
     }
 
-    fun handleSavedSelections(savedNumbers: List<Int>) {
-        if (savedNumbers.isNotEmpty()) _restoreSavedSelections.value = savedNumbers
+    fun handleSavedSelections() {
+        _savedSelectedItems.value?.let {
+            if (it.isNotEmpty()) _restoreSavedSelections.value = it
+        }
     }
 
-    fun onResume(timeInMillis: Long) {
-        startUpdatingRemainingTime(timeInMillis)
+    fun updateSavedSelections(selectedList: List<Int>) {
+        _savedSelectedItems.value = selectedList
+    }
+
+    fun onResume() {
+        currentDrawing?.let { startUpdatingRemainingTime(it.drawTime) }
     }
 
     fun onPause() {

@@ -1,5 +1,6 @@
 package com.example.grckikino.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,21 +11,20 @@ import com.example.grckikino.models.GridNumber
 import com.example.grckikino.utils.MAX_SELECTED_NUMBERS
 
 class NumbersAdapter(
-    private val numbers: List<GridNumber>,
     private val onClick: (GridNumber) -> Unit
 ) : RecyclerView.Adapter<NumbersAdapter.NumberViewHolder>() {
 
+    private var numbersList: List<GridNumber> = emptyList()
     private var selectedNumbersCounter = 0
     private var isMaximumSelected = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NumberViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.talon_grid_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.talon_grid_item, parent, false)
         return NumberViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: NumberViewHolder, position: Int) {
-        holder.bind(numbers[position])
+        holder.bind(numbersList[position])
     }
 
     fun increaseNumbersCounter(value: Int) {
@@ -37,9 +37,8 @@ class NumbersAdapter(
 
     fun decreaseNumbersCounter(value: Int) {
         if (selectedNumbersCounter == 0) return
-        selectedNumbersCounter -= value
         isMaximumSelected = false
-
+        selectedNumbersCounter -= value
     }
 
     inner class NumberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -47,7 +46,6 @@ class NumbersAdapter(
 
         fun bind(number: GridNumber) {
             numberTextView.text = number.value.toString()
-
             numberTextView.setBackgroundResource(handleNumberBackground(number))
             itemView.setOnClickListener {
                 this@NumbersAdapter.notifyItemChanged(adapterPosition)
@@ -74,5 +72,10 @@ class NumbersAdapter(
         }
     }
 
-    override fun getItemCount(): Int = numbers.size
+    fun setNumbersList(newList: List<GridNumber>) {
+        this.numbersList = newList
+        notifyDataSetChanged()
+    }
+
+    override fun getItemCount(): Int = numbersList.size
 }

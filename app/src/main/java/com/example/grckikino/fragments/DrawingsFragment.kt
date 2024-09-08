@@ -74,7 +74,7 @@ class DrawingsFragment : BaseFragment(), DrawingsAdapterListener {
         viewModel.drawingListResponse.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Success -> handleSuccessFlow(result.data)
-                is Result.Error -> handleErrorFlow(result.message ?: ContextCompat.getString(requireActivity(), R.string.something_went_wrong))
+                is Result.Error -> handleErrorFlow(result.message ?: ContextCompat.getString(requireActivity(), R.string.something_went_wrong), false)
                 is Result.Loading -> showProcessing()
             }
         }
@@ -92,12 +92,8 @@ class DrawingsFragment : BaseFragment(), DrawingsAdapterListener {
         }
     }
 
-    private fun handleErrorFlow(message: String) {
-        stopProcessing()
-        showAlertDialog(ContextCompat.getString(requireActivity(), R.string.error_occurred), message, ContextCompat.getString(requireActivity(), R.string.OK))
-    }
-
     override fun onToDrawingDetailsScreen(gameId: Int, drawId: Int) {
-        findNavController().navigate(R.id.action_drawingListFragment_to_drawingDetailsFragment)
+        val action = DrawingsFragmentDirections.actionDrawingListFragmentToDrawingDetailsFragment(drawId)
+        findNavController().navigate(action)
     }
 }

@@ -5,11 +5,13 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
@@ -43,7 +45,7 @@ class BaseActivity : AppCompatActivity(), BaseCoordinator {
         layoutParams.height = 27.toPx().toInt()
         backArrow.layoutParams = layoutParams
 
-        backArrow.setOnClickListener { navController.navigateUp() }
+        backArrow.setOnClickListener { onBackPressed() }
         Glide.with(this)
             .load(R.drawable.arrow_left)
             .into(backArrow)
@@ -70,11 +72,19 @@ class BaseActivity : AppCompatActivity(), BaseCoordinator {
             .into(toolbarIcon)
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if (navController.currentDestination?.id == R.id.resultsFragment ||
+            navController.currentDestination?.id == R.id.drawingAnimationFragment ||
+            navController.currentDestination?.id == R.id.drawingDetailsFragment) {
+            navController.popBackStack(R.id.drawingListFragment, false)
+        } else super.onBackPressed()
+    }
+
     private fun setupNavigationView() {
         toolbar.findViewById<BottomNavigationView>(R.id.navigation_view)
             .setupWithNavController(navController)
-        toolbar.findViewById<BottomNavigationView>(R.id.navigation_view)
-            .setOnItemSelectedListener { menuItem ->
+        toolbar.findViewById<BottomNavigationView>(R.id.navigation_view).setOnItemSelectedListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.talon -> {
                         navController.popBackStack(R.id.drawingDetailsFragment, false)

@@ -12,6 +12,9 @@ class DrawingsRepository(private val apiService: ApiService) {
     suspend fun getUpcomingDrawings(gameId: Int): Result<List<Drawing>> =
         safeApiCall { apiService.getUpcomingDrawings(gameId) }
 
+    suspend fun getDrawingDetails(gameId: Int, drawId: Int): Result<Drawing> =
+        safeApiCall { apiService.getDrawingDetails(gameId, drawId) }
+
 
     private suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): Result<T> =
         try {

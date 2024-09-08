@@ -2,7 +2,10 @@ package com.example.grckikino.fragments
 
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.grckikino.R
 import com.example.grckikino.api.RetrofitInstance
 import com.example.grckikino.fragments.helper.ProgressDialogFragment
 import com.example.grckikino.interfaces.BaseCoordinator
@@ -12,7 +15,6 @@ import com.example.grckikino.viewmodels.DrawingsViewModelFactory
 open class BaseFragment : Fragment() {
 
     protected var coordinator: BaseCoordinator? = null
-    protected var selectedNumbers: List<Int> = emptyList()
     private var progressDialog: ProgressDialogFragment? = null
 
     private val repository: DrawingsRepository by lazy {
@@ -41,13 +43,27 @@ open class BaseFragment : Fragment() {
         progressDialog = null
     }
 
-    protected fun showAlertDialog(title: String, message: String, buttonText: String) {
+    protected fun showAlertDialog(
+        title: String,
+        message: String,
+        buttonText: String,
+        shouldNavigateUp: Boolean
+    ) {
         AlertDialog.Builder(requireActivity())
             .setTitle(title)
             .setMessage(message)
             .setCancelable(false)
-            .setPositiveButton(buttonText) { dialogInterface, _ -> dialogInterface.dismiss() }
+            .setPositiveButton(buttonText) { dialogInterface, _ ->
+                if (shouldNavigateUp) {
+                    dialogInterface.dismiss()
+                    findNavController().navigateUp()
+                } else dialogInterface.dismiss()
+            }
             .create().show()
     }
 
+    protected fun handleErrorFlow(message: String, shouldNavigateUp: Boolean) {
+        stopProcessing()
+        showAlertDialog(ContextCompat.getString(requireActivity(), R.string.error_occurred), message, ContextCompat.getString(requireActivity(), R.string.OK), shouldNavigateUp)
+    }
 }

@@ -17,14 +17,27 @@
             app:popEnterAnim="@anim/fragment_slide_in_exit"
             app:popExitAnim="@anim/fragment_slide_out_exit" />
     </fragment>
+
+    <fragment
+        android:id="@+id/drawingDetailsFragment"
+        android:name="com.example.grckikino.fragments.DrawingDetailsFragment"
+        android:label="fragment_drawing_details"
+        tools:layout="@layout/fragment_drawing_details">
+        <argument
+            android:name="drawId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_drawingDetailsFragment_to_drawingAnimationFragment"
+            app:destination="@id/drawingAnimationFragment" />
+        <action
+            android:id="@+id/action_drawingDetailsFragment_to_resultsFragment"
+            app:destination="@id/resultsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/drawingAnimationFragment"
         android:name="com.example.grckikino.fragments.DrawingAnimationFragment"
-        android:label="fragment_drawing_details"
-        tools:layout="@layout/fragment_drawing_details">
-        <action
-            android:id="@+id/action_drawingAnimationFragment_to_drawingListFragment"
-            app:destination="@id/drawingListFragment" />
+        android:label="fragment_drawing_animation"
+        tools:layout="@layout/fragment_drawing_animation">
         <action
             android:id="@+id/action_drawingAnimationFragment_to_resultsFragment"
             app:destination="@id/resultsFragment" />
@@ -35,28 +48,10 @@
         android:label="fragment_results"
         tools:layout="@layout/fragment_results">
         <action
-            android:id="@+id/action_resultsFragment_to_drawingListFragment"
-            app:destination="@id/drawingListFragment" />
-        <action
             android:id="@+id/action_resultsFragment_to_drawingAnimationFragment"
             app:destination="@id/drawingAnimationFragment" />
         <action
-            android:id="@+id/action_resultsFragment_self"
-            app:destination="@id/resultsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/drawingDetailsFragment"
-        android:name="com.example.grckikino.fragments.DrawingDetailsFragment"
-        android:label="fragment_drawing_animation"
-        tools:layout="@layout/fragment_drawing_animation">
-        <action
-            android:id="@+id/action_drawingDetailsFragment_to_drawingListFragment"
-            app:destination="@id/drawingListFragment" />
-        <action
-            android:id="@+id/action_drawingDetailsFragment_to_drawingAnimationFragment"
-            app:destination="@id/drawingAnimationFragment" />
-        <action
-            android:id="@+id/action_drawingDetailsFragment_to_resultsFragment"
-            app:destination="@id/resultsFragment" />
+            android:id="@+id/action_resultsFragment_to_drawingDetailsFragment"
+            app:destination="@id/drawingDetailsFragment" />
     </fragment>
 </navigation>
