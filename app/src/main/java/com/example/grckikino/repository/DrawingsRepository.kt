@@ -1,10 +1,9 @@
 package com.example.grckikino.repository
 
-import androidx.core.content.ContextCompat
-import com.example.grckikino.R
 import com.example.grckikino.api.ApiService
 import com.example.grckikino.api.Result
 import com.example.grckikino.models.Drawing
+import com.example.grckikino.models.DrawingResults
 import retrofit2.Response
 
 class DrawingsRepository(private val apiService: ApiService) {
@@ -14,6 +13,9 @@ class DrawingsRepository(private val apiService: ApiService) {
 
     suspend fun getDrawingDetails(gameId: Int, drawId: Int): Result<Drawing> =
         safeApiCall { apiService.getDrawingDetails(gameId, drawId) }
+
+    suspend fun getDrawingResults(gameId: Int, fromDate: String, toDate: String): Result<DrawingResults> =
+        safeApiCall { apiService.getDrawingResults(gameId, fromDate, toDate) }
 
 
     private suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): Result<T> =

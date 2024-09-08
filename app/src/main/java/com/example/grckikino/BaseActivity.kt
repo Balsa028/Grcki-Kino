@@ -23,14 +23,19 @@ class BaseActivity : AppCompatActivity(), BaseCoordinator {
 
     private lateinit var navController: NavController
     private lateinit var toolbar: Toolbar
+    private lateinit var toolbarIcon: ImageView
+    private lateinit var toolbarTitle: TextView
+    private lateinit var toolbarWrapper: LinearLayout
+    private lateinit var navigationView: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)
-
         window.statusBarColor = ContextCompat.getColor(this, R.color.blue)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        initViews()
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainer) as NavHostFragment
@@ -38,30 +43,35 @@ class BaseActivity : AppCompatActivity(), BaseCoordinator {
         setupNavigationView()
     }
 
+    private fun initViews() {
+        toolbarIcon = toolbar.findViewById(R.id.toolbar_icon)
+        toolbarTitle = toolbar.findViewById(R.id.toolbar_title)
+        toolbarWrapper = toolbar.findViewById(R.id.toolbar_wrapper)
+        navigationView = toolbar.findViewById(R.id.navigation_view)
+    }
+
     override fun adjustToolbarForDrawingDetailsScreen() {
-        val backArrow = toolbar.findViewById<ImageView>(R.id.toolbar_icon)
-        val layoutParams = backArrow.layoutParams
+        val layoutParams = toolbarIcon.layoutParams
         layoutParams.width = 27.toPx().toInt()
         layoutParams.height = 27.toPx().toInt()
-        backArrow.layoutParams = layoutParams
+        toolbarIcon.layoutParams = layoutParams
 
-        backArrow.setOnClickListener { onBackPressed() }
+        toolbarIcon.setOnClickListener { onBackPressed() }
         Glide.with(this)
             .load(R.drawable.arrow_left)
-            .into(backArrow)
+            .into(toolbarIcon)
 
-        toolbar.findViewById<TextView>(R.id.toolbar_title).visibility = View.VISIBLE
-        toolbar.findViewById<LinearLayout>(R.id.toolbar_wrapper)
-            .setPadding(10.toPx().toInt(), 10.toPx().toInt(), 10.toPx().toInt(), 5.toPx().toInt())
-        toolbar.findViewById<BottomNavigationView>(R.id.navigation_view).visibility = View.VISIBLE
+        toolbarTitle.visibility = View.VISIBLE
+        toolbarWrapper.setPadding(10.toPx().toInt(), 10.toPx().toInt(), 10.toPx().toInt(), 5.toPx().toInt())
+        navigationView.visibility = View.VISIBLE
     }
 
     override fun adjustToolbarForDrawingsListScreen() {
-        toolbar.findViewById<LinearLayout>(R.id.toolbar_wrapper).setPadding(0)
-        toolbar.findViewById<TextView>(R.id.toolbar_title).visibility = View.GONE
-        toolbar.findViewById<BottomNavigationView>(R.id.navigation_view).visibility = View.GONE
+        toolbarWrapper.setPadding(0)
+        toolbarTitle.visibility = View.GONE
+        navigationView.visibility = View.GONE
+        navigationView.selectedItemId = R.id.talon
 
-        val toolbarIcon = toolbar.findViewById<ImageView>(R.id.toolbar_icon)
         val layoutParams = toolbarIcon.layoutParams
         layoutParams.width = 50.toPx().toInt()
         layoutParams.height = 50.toPx().toInt()
@@ -82,9 +92,8 @@ class BaseActivity : AppCompatActivity(), BaseCoordinator {
     }
 
     private fun setupNavigationView() {
-        toolbar.findViewById<BottomNavigationView>(R.id.navigation_view)
-            .setupWithNavController(navController)
-        toolbar.findViewById<BottomNavigationView>(R.id.navigation_view).setOnItemSelectedListener { menuItem ->
+        navigationView.setupWithNavController(navController)
+        navigationView.setOnItemSelectedListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.talon -> {
                         navController.popBackStack(R.id.drawingDetailsFragment, false)

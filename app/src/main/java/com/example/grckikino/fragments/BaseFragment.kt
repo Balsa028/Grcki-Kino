@@ -22,7 +22,7 @@ open class BaseFragment : Fragment() {
     }
 
     protected val viewModelFactory: DrawingsViewModelFactory by lazy {
-        DrawingsViewModelFactory(repository)
+        DrawingsViewModelFactory(repository, requireActivity().application)
     }
 
     override fun onAttach(context: Context) {

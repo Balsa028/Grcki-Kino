@@ -1,7 +1,6 @@
 package com.example.grckikino.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +10,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.grckikino.R
-import com.example.grckikino.adapters.DrawingsAdapterListener
 import com.example.grckikino.adapters.DrawingsAdapter
 import com.example.grckikino.api.Result
 import com.example.grckikino.models.Drawing
 import com.example.grckikino.viewmodels.DrawingsViewModel
 
-class DrawingsFragment : BaseFragment(), DrawingsAdapterListener {
+class DrawingsFragment : BaseFragment() {
 
     private val viewModel: DrawingsViewModel by lazy {
         ViewModelProvider(requireActivity(), viewModelFactory)[DrawingsViewModel::class.java]
@@ -63,8 +61,10 @@ class DrawingsFragment : BaseFragment(), DrawingsAdapterListener {
     }
 
     private fun setupRecycleView() {
-        drawingsAdapter = DrawingsAdapter()
-        drawingsAdapter.setAdapterListener(this)
+        drawingsAdapter = DrawingsAdapter { drawId ->
+            val action = DrawingsFragmentDirections.actionDrawingListFragmentToDrawingDetailsFragment(drawId)
+            findNavController().navigate(action)
+        }
         drawingRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
         drawingRecyclerView.setHasFixedSize(true)
         drawingRecyclerView.adapter = drawingsAdapter
@@ -90,10 +90,5 @@ class DrawingsFragment : BaseFragment(), DrawingsAdapterListener {
             drawingsAdapter.setDrawingList(it)
             viewModel.startUpdatingRemainingTime(it)
         }
-    }
-
-    override fun onToDrawingDetailsScreen(gameId: Int, drawId: Int) {
-        val action = DrawingsFragmentDirections.actionDrawingListFragmentToDrawingDetailsFragment(drawId)
-        findNavController().navigate(action)
     }
 }

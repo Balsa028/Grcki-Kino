@@ -1,10 +1,12 @@
 package com.example.grckikino.viewmodels
 
-import android.util.Log
+import android.app.Application
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.grckikino.R
 import com.example.grckikino.api.Result
 import com.example.grckikino.models.Drawing
 import com.example.grckikino.models.GridNumber
@@ -16,7 +18,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-class DrawingDetailsViewModel(private val repository: DrawingsRepository) : ViewModel() {
+class DrawingDetailsViewModel(private val repository: DrawingsRepository, application: Application) : AndroidViewModel(application) {
 
     private val _drawingResponse: MutableLiveData<Result<Drawing>> = MutableLiveData<Result<Drawing>>()
     val drawingResponse: LiveData<Result<Drawing>> = _drawingResponse
@@ -64,7 +66,7 @@ class DrawingDetailsViewModel(private val repository: DrawingsRepository) : View
                     updatedValue = drawTime.formatRemainingTimeForDisplay()
                 else {
                     stopUpdatingRemainingTime()
-                    updatedValue = "Odigrano"
+                    updatedValue = ContextCompat.getString(getApplication(), R.string.past)
                 }
                 _updateRemainingTime.value = updatedValue
                 delay(1000)

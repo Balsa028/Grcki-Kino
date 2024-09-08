@@ -2,6 +2,7 @@ package com.example.grckikino.utils
 
 import android.content.res.Resources
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -27,4 +28,21 @@ fun Long.formatRemainingTimeForDisplay(): String {
 
 fun Int.toPx(): Float {
     return this * Resources.getSystem().displayMetrics.density
+}
+
+fun Date.formatForApiCall(): String {
+    val dataFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return dataFormat.format(this)
+}
+
+fun Date.formatForResults(): String {
+    val dataFormat = SimpleDateFormat("dd.MM", Locale.getDefault())
+    return dataFormat.format(this)
+}
+
+fun Date.yesterday(): Date {
+    val calendar = Calendar.getInstance()
+    calendar.time = this
+    calendar.add(Calendar.DAY_OF_YEAR, -1)
+    return calendar.time
 }

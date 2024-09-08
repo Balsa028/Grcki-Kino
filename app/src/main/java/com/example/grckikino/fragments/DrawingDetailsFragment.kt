@@ -1,7 +1,6 @@
 package com.example.grckikino.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -80,52 +79,25 @@ class DrawingDetailsFragment : BaseFragment() {
                 is Result.Loading -> showProcessing()
             }
         }
-        viewModel.updateRemainingTime.observe(viewLifecycleOwner) { formatedText ->
-            txtRemainingTime.text = formatedText
-            txtRemainingTime.setTextColor(
-                ContextCompat.getColor(
-                    requireActivity(),
-                    if (formatedText <= REMAINING_TIME_WARNING || formatedText == resources.getString(
-                            R.string.past
-                        )
-                    ) R.color.red else R.color.white
-                )
-            )
-            if (formatedText == REMAINING_TIME_DIALOG_WARNING)
-                showAlertDialog(
-                    resources.getString(R.string.warning_title),
-                    resources.getString(R.string.warning_description),
-                    resources.getString(R.string.OK),
-                    false
-                )
-        }
-
+        viewModel.updateRemainingTime.observe(viewLifecycleOwner) { handleRemainingTimeChanges(it) }
         viewModel.updateRandomSelectedItems.observe(viewLifecycleOwner) { randomlySelectedNumbers ->
             randomlySelectedNumbers.forEach { adapter.notifyItemChanged(it - 1) }
             adapter.increaseNumbersCounter(randomlySelectedNumbers.size)
             viewModel.updateSavedSelections(randomlySelectedNumbers)
         }
-
         viewModel.restoreSavedSelections.observe(viewLifecycleOwner) { savedNumbers ->
             savedNumbers.forEach { adapter.notifyItemChanged(it - 1) }
         }
-
-        viewModel.removeItemOnIndex.observe(viewLifecycleOwner) { index ->
-            adapter.notifyItemChanged(index)
-        }
-        viewModel.increaseSelectedCounter.observe(viewLifecycleOwner) { value ->
-            adapter.increaseNumbersCounter(value)
-        }
-        viewModel.decreaseSelectedCounter.observe(viewLifecycleOwner) { value ->
-            adapter.decreaseNumbersCounter(value)
-        }
+        viewModel.removeItemOnIndex.observe(viewLifecycleOwner) { index -> adapter.notifyItemChanged(index) }
+        viewModel.increaseSelectedCounter.observe(viewLifecycleOwner) { value -> adapter.increaseNumbersCounter(value) }
+        viewModel.decreaseSelectedCounter.observe(viewLifecycleOwner) { value -> adapter.decreaseNumbersCounter(value) }
     }
 
 
     private fun initViews(view: View) {
         txtRemainingTime = view.findViewById(R.id.remaining_time_textview)
-        txtDrawingTime = view.findViewById(R.id.drawing_time_textview)
-        txtDrawId = view.findViewById(R.id.drawing_id_textview)
+        txtDrawingTime = view.findViewById(R.id.drawing_time_result_textview)
+        txtDrawId = view.findViewById(R.id.drawing_id_results_textview)
 
         btnRandom = view.findViewById(R.id.btnRandom)
         btnRandom.setOnClickListener {
@@ -133,8 +105,17 @@ class DrawingDetailsFragment : BaseFragment() {
         }
 
         spinner = view.findViewById(R.id.spinner_numbers)
-        val spinnerNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
+        setupSpinner()
 
+        adapter = NumbersAdapter { clickedNumber ->
+            viewModel.handleSelectingBehavior(clickedNumber)
+        }
+        numberRecView = view.findViewById(R.id.talonRecView)
+        numberRecView.layoutManager = GridLayoutManager(requireActivity(), 10)
+    }
+
+    private fun setupSpinner() {
+        val spinnerNumbers = listOf(1, 2, 3, 4, 5, 6, 7, 8)
         val arrayAdapter = ArrayAdapter(
             requireActivity(),
             androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
@@ -144,23 +125,13 @@ class DrawingDetailsFragment : BaseFragment() {
         spinner.adapter = arrayAdapter
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
                 selectedSpinnerNumber = parent?.getItemAtPosition(position) as Int
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
-
-        adapter = NumbersAdapter { clickedNumber ->
-            viewModel.handleSelectingBehavior(clickedNumber)
-        }
-        numberRecView = view.findViewById(R.id.talonRecView)
-        numberRecView.layoutManager = GridLayoutManager(requireActivity(), 10)
     }
 
     private fun initData() {
@@ -182,18 +153,18 @@ class DrawingDetailsFragment : BaseFragment() {
         drawing?.let {
             if (!isApiAlreadyCalled) {
                 populateAdapterWithData()
-                setDrawDetailsData(it)
+                setDrawingDetailsData(it)
                 viewModel.startUpdatingRemainingTime(it.drawTime)
                 viewModel.saveCurrentDrawing(it)
             } else {
                 showProcessing()
                 setupAdapter()
-                setDrawDetailsData(it)
+                setDrawingDetailsData(it)
             }
         }
     }
 
-    private fun setDrawDetailsData(drawing: Drawing) {
+    private fun setDrawingDetailsData(drawing: Drawing) {
         txtDrawingTime.text = drawing.drawTime.formatDrawingTimeForDisplay()
         txtDrawId.text = drawing.drawId.toString()
     }
@@ -206,6 +177,20 @@ class DrawingDetailsFragment : BaseFragment() {
                 setupAdapter()
             }
         }
+    }
+
+    private fun handleRemainingTimeChanges(formatedText: String) {
+        txtRemainingTime.text = formatedText
+        txtRemainingTime.setTextColor(
+            ContextCompat.getColor(
+                requireActivity(),
+                if (formatedText <= REMAINING_TIME_WARNING || formatedText == resources.getString(R.string.past)) R.color.red else R.color.white
+            )
+        )
+        if (formatedText == REMAINING_TIME_DIALOG_WARNING)
+            showAlertDialog(resources.getString(R.string.warning_title), resources.getString(R.string.warning_description), resources.getString(R.string.OK), false)
+        if (formatedText == resources.getString(R.string.past))
+            viewModel.clearSelectedNumber(gridNumbers)
     }
 
     override fun onResume() {

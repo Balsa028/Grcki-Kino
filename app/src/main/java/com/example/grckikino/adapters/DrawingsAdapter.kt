@@ -9,18 +9,18 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.grckikino.R
 import com.example.grckikino.models.Drawing
+import com.example.grckikino.models.GridNumber
 import com.example.grckikino.utils.REMAINING_TIME_WARNING
 import com.example.grckikino.utils.formatRemainingTimeForDisplay
 import com.example.grckikino.utils.formatDrawingTimeForDisplay
 
-class DrawingsAdapter : RecyclerView.Adapter<DrawingsAdapter.DrawingViewHolder>() {
+class DrawingsAdapter(private val onClick: (Int) -> Unit) : RecyclerView.Adapter<DrawingsAdapter.DrawingViewHolder>() {
 
     private var drawingList: List<Drawing> = emptyList()
-    private var adapterListener: DrawingsAdapterListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DrawingViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.drawing_list_item, parent, false)
-        return DrawingViewHolder(view, adapterListener)
+        return DrawingViewHolder(view)
     }
 
     override fun getItemCount(): Int = drawingList.size
@@ -36,11 +36,7 @@ class DrawingsAdapter : RecyclerView.Adapter<DrawingsAdapter.DrawingViewHolder>(
 
     fun getDrawingList() = drawingList
 
-    fun setAdapterListener(listener: DrawingsAdapterListener) {
-        this.adapterListener = listener
-    }
-
-    class DrawingViewHolder(itemView: View, private val adapterListener: DrawingsAdapterListener?) :
+    inner class DrawingViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
 
         val parent: ConstraintLayout
@@ -64,7 +60,7 @@ class DrawingsAdapter : RecyclerView.Adapter<DrawingsAdapter.DrawingViewHolder>(
                 )
             )
             parent.setOnClickListener {
-                adapterListener?.onToDrawingDetailsScreen(drawing.gameId, drawing.drawId)
+                this@DrawingsAdapter.onClick(drawing.drawId)
             }
         }
     }

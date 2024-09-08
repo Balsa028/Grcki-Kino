@@ -1,7 +1,6 @@
 package com.example.grckikino.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import android.webkit.WebViewClient
 import com.example.grckikino.R
 import com.example.grckikino.utils.LIVE_DRAWING_URL
 
-class DrawingAnimationFragment : Fragment() {
+class DrawingAnimationFragment : BaseFragment() {
 
     private lateinit var webView: WebView
 
