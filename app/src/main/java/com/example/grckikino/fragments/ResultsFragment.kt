@@ -1,7 +1,6 @@
 package com.example.grckikino.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,15 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.grckikino.R
 import com.example.grckikino.adapters.ResultsAdapter
 import com.example.grckikino.api.Result
-import com.example.grckikino.models.ResultAdapterItem
 import com.example.grckikino.models.ResultItem
 import com.example.grckikino.utils.formatForApiCall
 import com.example.grckikino.utils.yesterday
 import com.example.grckikino.viewmodels.DrawingResultViewModel
-import com.example.grckikino.viewmodels.DrawingsViewModel
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 class ResultsFragment : BaseFragment() {
 

@@ -58,6 +58,10 @@ dependencies {
     //image loading
     implementation (libs.glide)
 
+    // Unit test dependencies
+    testImplementation (libs.androidx.core.testing)
+    testImplementation (libs.kotlinx.coroutines.test)
+    testImplementation (libs.mockk)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
