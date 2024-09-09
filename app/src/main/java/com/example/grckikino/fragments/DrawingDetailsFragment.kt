@@ -132,7 +132,7 @@ class DrawingDetailsFragment : BaseFragment() {
 
         selectedNumbersContainer = view.findViewById(R.id.selectedNumbersContainer)
         selectedNumbersRecView = view.findViewById(R.id.selectedNumbersRecView)
-        selectedNumbersRecView.layoutManager = GridLayoutManager(requireActivity(), 4)
+        selectedNumbersRecView.layoutManager = GridLayoutManager(requireActivity(), 5)
         selectedNumbersAdapter = ResultNumbersAdapter()
         selectedNumbersRecView.adapter = selectedNumbersAdapter
     }

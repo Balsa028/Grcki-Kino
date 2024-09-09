@@ -55,14 +55,17 @@ class ResultsAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     class DrawViewHolder(itemView: View) : ViewHolder(itemView) {
         private val recycleView: RecyclerView = itemView.findViewById(R.id.result_number_rec_view)
+        private val adapter: ResultNumbersAdapter = ResultNumbersAdapter()
 
-        fun bind(item: ResultAdapterItem) {
+        init {
             recycleView.setHasFixedSize(true)
             recycleView.layoutManager = GridLayoutManager(itemView.context, 7)
             recycleView.isNestedScrollingEnabled = false
-            val adapter = ResultNumbersAdapter()
-            adapter.setNumbers(item.winningNumbers?.sorted() ?: emptyList())
             recycleView.adapter = adapter
+        }
+
+        fun bind(item: ResultAdapterItem) {
+            adapter.setNumbers(item.winningNumbers?.sorted() ?: emptyList())
         }
     }
 }
