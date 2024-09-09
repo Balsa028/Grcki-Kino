@@ -371,4 +371,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/random_numbers_container" />
 
+    <LinearLayout
+        android:id="@+id/selectedNumbersContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:weightSum="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/talonRecView">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/selectedNumbersRecView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6" />
+
+        <ImageView
+            android:id="@+id/deleteAllImageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.4"
+            android:src="@drawable/trash" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

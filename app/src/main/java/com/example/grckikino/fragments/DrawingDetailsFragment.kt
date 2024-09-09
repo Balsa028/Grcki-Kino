@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.grckikino.R
 import com.example.grckikino.adapters.NumbersAdapter
+import com.example.grckikino.adapters.ResultNumbersAdapter
 import com.example.grckikino.api.Result
 import com.example.grckikino.models.Drawing
 import com.example.grckikino.models.GridNumber
@@ -48,6 +51,10 @@ class DrawingDetailsFragment : BaseFragment() {
     private lateinit var txtDrawingTime: TextView
     private lateinit var txtDrawId: TextView
     private lateinit var btnRandom: Button
+    private lateinit var selectedNumbersRecView: RecyclerView
+    private lateinit var deleteAllImageView: ImageView
+    private lateinit var selectedNumbersContainer: LinearLayout
+    private lateinit var selectedNumbersAdapter: ResultNumbersAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,6 +98,14 @@ class DrawingDetailsFragment : BaseFragment() {
         viewModel.removeItemOnIndex.observe(viewLifecycleOwner) { index -> adapter.notifyItemChanged(index) }
         viewModel.increaseSelectedCounter.observe(viewLifecycleOwner) { value -> adapter.increaseNumbersCounter(value) }
         viewModel.decreaseSelectedCounter.observe(viewLifecycleOwner) { value -> adapter.decreaseNumbersCounter(value) }
+        viewModel.savedSelectedItems.observe(viewLifecycleOwner) { selectedList ->
+            if (selectedList.isNotEmpty()) {
+                selectedNumbersContainer.visibility = View.VISIBLE
+                selectedNumbersAdapter.setNumbers(selectedList)
+            } else {
+                selectedNumbersContainer.visibility = View.GONE
+            }
+        }
     }
 
 
@@ -98,6 +113,8 @@ class DrawingDetailsFragment : BaseFragment() {
         txtRemainingTime = view.findViewById(R.id.remaining_time_textview)
         txtDrawingTime = view.findViewById(R.id.drawing_time_result_textview)
         txtDrawId = view.findViewById(R.id.drawing_id_results_textview)
+        deleteAllImageView = view.findViewById(R.id.deleteAllImageView)
+        deleteAllImageView.setOnClickListener { viewModel.clearSelectedNumber(gridNumbers) }
 
         btnRandom = view.findViewById(R.id.btnRandom)
         btnRandom.setOnClickListener {
@@ -112,6 +129,12 @@ class DrawingDetailsFragment : BaseFragment() {
         }
         numberRecView = view.findViewById(R.id.talonRecView)
         numberRecView.layoutManager = GridLayoutManager(requireActivity(), 10)
+
+        selectedNumbersContainer = view.findViewById(R.id.selectedNumbersContainer)
+        selectedNumbersRecView = view.findViewById(R.id.selectedNumbersRecView)
+        selectedNumbersRecView.layoutManager = GridLayoutManager(requireActivity(), 4)
+        selectedNumbersAdapter = ResultNumbersAdapter()
+        selectedNumbersRecView.adapter = selectedNumbersAdapter
     }
 
     private fun setupSpinner() {

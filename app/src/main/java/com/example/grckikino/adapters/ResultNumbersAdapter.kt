@@ -7,7 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.grckikino.R
 
-class ResultNumbersAdapter(private val numbers: List<Int>) : RecyclerView.Adapter<ResultNumbersAdapter.ResultNumberViewHolder>() {
+class ResultNumbersAdapter : RecyclerView.Adapter<ResultNumbersAdapter.ResultNumberViewHolder>() {
+
+    private var numbers: List<Int> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultNumberViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.result_number_item, parent, false)
@@ -19,6 +21,11 @@ class ResultNumbersAdapter(private val numbers: List<Int>) : RecyclerView.Adapte
     }
 
     override fun getItemCount(): Int = numbers.size
+
+    fun setNumbers(newList: List<Int>) {
+        numbers = newList
+        notifyDataSetChanged()
+    }
 
     inner class ResultNumberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val textView: TextView = itemView.findViewById(R.id.result_number_text_view)

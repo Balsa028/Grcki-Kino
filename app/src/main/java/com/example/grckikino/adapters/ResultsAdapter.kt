@@ -60,7 +60,9 @@ class ResultsAdapter : RecyclerView.Adapter<ViewHolder>() {
             recycleView.setHasFixedSize(true)
             recycleView.layoutManager = GridLayoutManager(itemView.context, 7)
             recycleView.isNestedScrollingEnabled = false
-            recycleView.adapter = ResultNumbersAdapter(item.winningNumbers?.sorted() ?: emptyList())
+            val adapter = ResultNumbersAdapter()
+            adapter.setNumbers(item.winningNumbers?.sorted() ?: emptyList())
+            recycleView.adapter = adapter
         }
     }
 }
