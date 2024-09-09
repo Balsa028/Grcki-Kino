@@ -11,6 +11,7 @@ import com.example.grckikino.repository.DrawingsRepository
 import com.example.grckikino.utils.GRCKI_LOTO_GAME_ID
 import com.example.grckikino.utils.HEADER_TYPE
 import com.example.grckikino.utils.RESULT_ITEM_TYPE
+import com.example.grckikino.utils.formatForResults
 import com.example.grckikino.viewmodels.DrawingResultViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -29,6 +30,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import java.util.Date
 
 @ExperimentalCoroutinesApi
 class DrawingResultsViewModelTest {
@@ -104,9 +106,9 @@ class DrawingResultsViewModelTest {
             ResultItem(drawTime = 1725869366, drawId = 2, winningNumbers = WinningNumbers(listOf(4, 5, 6)))
         )
         val expectedAdapterItems = listOf(
-            ResultAdapterItem(type = HEADER_TYPE, drawTime = "09.09   00:24", drawId = 1),
+            ResultAdapterItem(type = HEADER_TYPE, drawTime = "${Date().formatForResults()}   00:24", drawId = 1),
             ResultAdapterItem(type = RESULT_ITEM_TYPE, winningNumbers = listOf(1, 2, 3)),
-            ResultAdapterItem(type = HEADER_TYPE, drawTime = "09.09   00:24", drawId = 2),
+            ResultAdapterItem(type = HEADER_TYPE, drawTime = "${Date().formatForResults()}   00:24", drawId = 2),
             ResultAdapterItem(type = RESULT_ITEM_TYPE, winningNumbers = listOf(4, 5, 6))
         )
 
